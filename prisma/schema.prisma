@@ -1,0 +1,161 @@
+// ---------- ⚙️ 1. Настройки ----------
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- 🧩 2. ENUM'ы ----------
+// Лучше чем строки — исключают ошибки в коде
+
+enum UserRole {
+  user
+  admin
+  mentor
+}
+
+enum TaskPriority {
+  low
+  normal
+  high
+}
+
+enum TaskStatus {
+  pending
+  in_progress
+  completed
+}
+
+enum Frequency {
+  daily
+  weekly
+  monthly
+}
+
+// ---------- 👤 3. Модель пользователя ----------
+
+model User {
+  id            Int             @id @default(autoincrement())
+  email         String          @unique
+  name          String?
+  passwordHash  String
+  telegramId    String?         @unique
+  telegramCode  String?         @unique
+  role          UserRole        @default(user)
+  isVerified    Boolean         @default(false)
+  verifyToken   String?         
+  verifyExpires DateTime?      
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  refreshToken  String?
+
+  reports       DailyReport[]
+  focusSessions FocusSession[]
+  habits        Habit[]
+  tasks         Task[]
+  transactions  Transaction[]
+  categories    Category[]
+}
+
+
+// ---------- ✅ 4. Задачи ----------
+
+model Task {
+  id            Int           @id @default(autoincrement())
+  userId        Int
+  title         String
+  description   String?
+  startTime     DateTime?
+  endTime       DateTime?
+  isAllDay      Boolean       @default(false)
+  category      String?
+  priority      TaskPriority  @default(normal)
+  status        TaskStatus    @default(pending)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relations
+  focusSessions FocusSession[]
+  user          User          @relation(fields: [userId], references: [id])
+}
+
+// ---------- 💪 5. Привычки ----------
+
+model Habit {
+  id           Int         @id @default(autoincrement())
+  userId       Int
+  title        String
+  frequency    Frequency    @default(daily)
+  reminderTime String?
+  streak       Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  user         User         @relation(fields: [userId], references: [id])
+}
+
+// ---------- ⏱️ 6. Фокус-сессии ----------
+
+model FocusSession {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  taskId    Int?
+  duration  Int
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  task      Task?    @relation(fields: [taskId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+// ---------- 📅 7. Дневные отчёты ----------
+
+model DailyReport {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  date           DateTime
+  tasksCompleted Int
+  tasksPending   Int
+  focusMinutes   Int
+  habitsDone     Int
+  createdAt      DateTime @default(now())
+
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Один отчёт в день на пользователя
+  @@unique([userId, date])
+}
+
+// ---------- 💰 8. Финансы ----------
+
+model Transaction {
+  id          Int        @id @default(autoincrement())
+  userId      Int
+  type        String      // 'income' | 'expense'
+  amount      Decimal      @db.Decimal
+  categoryId  Int?
+  note        String?
+  date        DateTime    @default(now())
+  createdAt   DateTime    @default(now())
+  user        User        @relation(fields: [userId], references: [id])
+  category    Category?   @relation(fields: [categoryId], references: [id])
+}
+
+// ---------- 🏷️ 9. Категории ----------
+
+model Category {
+  id           Int            @id @default(autoincrement())
+  name         String
+  type         String         // 'income' | 'expense'
+  userId       Int
+  createdAt    DateTime       @default(now())
+
+  user         User           @relation(fields: [userId], references: [id])
+  transactions Transaction[]
+
+  @@index([userId, type])
+}
