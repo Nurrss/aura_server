@@ -53,6 +53,6 @@ export const completeTask = async (userId, taskId) => {
   if (!t || t.userId !== userId) throw new Error('Task not found');
   return prisma.task.update({
     where: { id: taskId },
-    data: { status: 'done' },
+    data: { status: 'completed' },
   });
 };
