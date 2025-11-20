@@ -11,5 +11,6 @@ router.post('/', taskController.createTask);
 router.patch('/:id', taskController.updateTask);
 router.patch('/:id/move', taskController.moveTask);
 router.post('/:id/complete', taskController.completeTask);
+router.delete('/:id', taskController.deleteTask);
 
 export default router;

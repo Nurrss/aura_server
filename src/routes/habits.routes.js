@@ -10,5 +10,6 @@ router.get('/', habitController.getHabits);
 router.post('/', habitController.createHabit);
 router.post('/:id/toggle', habitController.toggleHabit);
 router.patch('/:id', habitController.updateHabit);
+router.delete('/:id', habitController.deleteHabit);
 
 export default router;

@@ -23,7 +23,7 @@ export const finishSession = async (userId, sessionId, duration, completed) => {
   if (completed && s.taskId) {
     await prisma.task.update({
       where: { id: s.taskId },
-      data: { status: 'done' },
+      data: { status: 'completed' },
     });
   }
   return updated;
@@ -37,4 +37,10 @@ export const getStats = async (userId, from, to) => {
   const sessions = await prisma.focusSession.findMany({ where });
   const total = sessions.reduce((sum, s) => sum + (s.duration || 0), 0);
   return { totalMinutes: total, sessionsCount: sessions.length, sessions };
+};
+
+export const deleteSession = async (userId, sessionId) => {
+  const s = await prisma.focusSession.findUnique({ where: { id: sessionId } });
+  if (!s || s.userId !== userId) throw new Error('Session not found');
+  return prisma.focusSession.delete({ where: { id: sessionId } });
 };

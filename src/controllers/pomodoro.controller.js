@@ -40,3 +40,12 @@ export const stats = async (req, res) => {
     return fail(res, err.message || 'Stats failed', 400);
   }
 };
+
+export const deleteSession = async (req, res) => {
+  try {
+    await pomodoroService.deleteSession(req.user.id, Number(req.params.id));
+    return ok(res, { message: 'Session deleted' });
+  } catch (err) {
+    return fail(res, err.message || 'Delete failed', 400);
+  }
+};

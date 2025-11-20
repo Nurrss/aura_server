@@ -41,3 +41,9 @@ export const toggleHabit = async (userId, habitId) => {
     data: { streak, lastCompletedAt: today.toDate() },
   });
 };
+
+export const deleteHabit = async (userId, habitId) => {
+  const h = await prisma.habit.findUnique({ where: { id: habitId } });
+  if (!h || h.userId !== userId) throw new Error('Habit not found');
+  return prisma.habit.delete({ where: { id: habitId } });
+};

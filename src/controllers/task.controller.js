@@ -58,3 +58,12 @@ export const completeTask = async (req, res) => {
     return fail(res, err.message || 'Complete failed', 400);
   }
 };
+
+export const deleteTask = async (req, res) => {
+  try {
+    await taskService.deleteTask(req.user.id, Number(req.params.id));
+    return ok(res, { message: 'Task deleted' });
+  } catch (err) {
+    return fail(res, err.message || 'Delete failed', 400);
+  }
+};

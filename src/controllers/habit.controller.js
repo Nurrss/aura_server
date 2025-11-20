@@ -1,3 +1,4 @@
+//habit.controller.js
 import { ok, fail } from '../utils/response.js';
 import * as habitService from '../services/habit.service.js';
 
@@ -41,5 +42,14 @@ export const updateHabit = async (req, res) => {
     return ok(res, h);
   } catch (err) {
     return fail(res, err.message || 'Update failed', 400);
+  }
+};
+
+export const deleteHabit = async (req, res) => {
+  try {
+    await habitService.deleteHabit(req.user.id, Number(req.params.id));
+    return ok(res, { message: 'Habit deleted' });
+  } catch (err) {
+    return fail(res, err.message || 'Delete failed', 400);
   }
 };

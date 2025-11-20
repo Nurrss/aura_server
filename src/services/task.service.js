@@ -56,3 +56,9 @@ export const completeTask = async (userId, taskId) => {
     data: { status: 'completed' },
   });
 };
+
+export const deleteTask = async (userId, taskId) => {
+  const t = await prisma.task.findUnique({ where: { id: taskId } });
+  if (!t || t.userId !== userId) throw new Error('Task not found');
+  return prisma.task.delete({ where: { id: taskId } });
+};
