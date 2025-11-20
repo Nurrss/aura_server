@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import { doubleCsrf } from 'csrf-csrf';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -37,6 +38,29 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+// CSRF Protection
+const {
+  generateToken, // generates a CSRF token
+  doubleCsrfProtection, // middleware to validate CSRF
+} = doubleCsrf({
+  getSecret: () => ENV.JWT_ACCESS_SECRET, // Use existing secret
+  cookieName: 'x-csrf-token',
+  cookieOptions: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+  },
+  size: 64,
+  ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
+});
+
+// Endpoint to get CSRF token
+app.get('/api/csrf-token', (req, res) => {
+  const csrfToken = generateToken(req, res);
+  res.json({ csrfToken });
+});
+
 // HTTP request logging
 app.use(morgan('combined', { stream: logger.stream }));
 
@@ -63,6 +87,9 @@ app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
 app.use('/api/auth/forgot-password', emailLimiter);
 app.use('/api/auth/reset-password', authLimiter);
+
+// Apply CSRF protection to all API routes (ignores GET/HEAD/OPTIONS)
+app.use('/api', doubleCsrfProtection);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
