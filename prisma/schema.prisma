@@ -46,8 +46,9 @@ model User {
   telegramCode  String?         @unique
   role          UserRole        @default(user)
   isVerified    Boolean         @default(false)
-  verifyToken   String?         
-  verifyExpires DateTime?      
+  verifyToken   String?
+  verifyExpires DateTime?
+  preferences   Json?
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
@@ -86,16 +87,17 @@ model Task {
 // ---------- 💪 5. Привычки ----------
 
 model Habit {
-  id           Int         @id @default(autoincrement())
-  userId       Int
-  title        String
-  frequency    Frequency    @default(daily)
-  reminderTime String?
-  streak       Int          @default(0)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id              Int         @id @default(autoincrement())
+  userId          Int
+  title           String
+  frequency       Frequency    @default(daily)
+  reminderTime    String?
+  lastCompletedAt DateTime?
+  streak          Int          @default(0)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 
-  user         User         @relation(fields: [userId], references: [id])
+  user            User         @relation(fields: [userId], references: [id])
 }
 
 // ---------- ⏱️ 6. Фокус-сессии ----------

@@ -11,6 +11,7 @@ import habitRoutes from './routes/habits.routes.js';
 import pomodoroRoutes from './routes/pomodoro.routes.js';
 import reportRoutes from './routes/reports.routes.js';
 import telegramRoutes from './routes/telegram.routes.js';
+import userRoutes from './routes/user.routes.js';
 import './bot/telegramBot.js';
 
 const app = express();
@@ -23,6 +24,7 @@ app.use('/api/habits', habitRoutes);
 app.use('/api/pomodoro', pomodoroRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/telegram', telegramRoutes);
+app.use('/api/users', userRoutes);
 
 app.get('/', (req, res) => {
   res.json({ success: true, message: 'Aura API is running' });
