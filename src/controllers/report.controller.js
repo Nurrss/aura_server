@@ -6,7 +6,7 @@ import { ok, fail } from '../utils/response.js';
 
 export const getToday = async (req, res) => {
   try {
-    const r = await reportService.getTodayReport(req.user.id);
+    const r = await getTodayReport(req.user.id);
     return ok(res, r);
   } catch (err) {
     return fail(res, err.message || 'Report failed', 500);
@@ -16,7 +16,7 @@ export const getToday = async (req, res) => {
 export const saveDaily = async (req, res) => {
   try {
     const payload = req.body;
-    const saved = await reportService.saveDailyReport(req.user.id, payload);
+    const saved = await saveDailyReport(req.user.id, payload);
     return ok(res, saved);
   } catch (err) {
     return fail(res, err.message || 'Save failed', 400);

@@ -5,6 +5,10 @@ import crypto from 'crypto';
 import validator from 'validator';
 import dns from 'dns/promises';
 import { sendVerificationEmail } from '../services/email.service.js';
+import jwt from 'jsonwebtoken';
+import { ENV } from '../config/env.js';
+import * as telegramService from '../services/telegram.service.js';
+import { sendResetPasswordEmail } from '../utils/email.js';
 
 /**
  * Register: create user + return tokens
@@ -168,10 +172,156 @@ export const logout = async (req, res) => {
     const token = header.split(' ')[1];
     const decoded = jwt.verify(token, ENV.JWT_ACCESS_SECRET);
 
-    const data = await logoutUser(decoded.id);
+    const data = await authService.logoutUser(decoded.id);
     return res.status(200).json({ success: true, data });
   } catch (error) {
     console.error('Logout error:', error);
     return res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// ========== 🔑 Forgot Password ==========
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email)
+      return res
+        .status(400)
+        .json({ success: false, error: 'Email is required' });
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user)
+      return res.status(200).json({
+        success: true,
+        message: 'If the email exists, reset link sent.',
+      });
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires = new Date(Date.now() + 15 * 60 * 1000);
+
+    await prisma.user.update({
+      where: { email },
+      data: { verifyToken: token, verifyExpires: expires },
+    });
+
+    await sendResetPasswordEmail(user.email, token);
+    return res
+      .status(200)
+      .json({ success: true, message: 'Reset link sent to your email' });
+  } catch (err) {
+    console.error('Forgot password error:', err);
+    res
+      .status(500)
+      .json({ success: false, error: 'Failed to send reset link' });
+  }
+};
+
+// ========== 🔁 Reset Password ==========
+export const resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    if (!token || !newPassword)
+      return res
+        .status(400)
+        .json({ success: false, error: 'Token and password required' });
+
+    const user = await prisma.user.findFirst({
+      where: {
+        verifyToken: token,
+        verifyExpires: { gt: new Date() },
+      },
+    });
+    if (!user)
+      return res
+        .status(400)
+        .json({ success: false, error: 'Invalid or expired token' });
+
+    const passwordHash = await authService.hashPassword(newPassword);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { passwordHash, verifyToken: null, verifyExpires: null },
+    });
+
+    return res
+      .status(200)
+      .json({ success: true, message: 'Password successfully reset' });
+  } catch (err) {
+    console.error('Reset password error:', err);
+    res.status(500).json({ success: false, error: 'Failed to reset password' });
+  }
+};
+
+// ========== 🔒 Change Password (authenticated user) ==========
+export const changePassword = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { oldPassword, newPassword } = req.body;
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user)
+      return res.status(404).json({ success: false, error: 'User not found' });
+
+    const isValid = await authService.verifyPassword(
+      oldPassword,
+      user.passwordHash
+    );
+    if (!isValid)
+      return res
+        .status(400)
+        .json({ success: false, error: 'Old password incorrect' });
+
+    const passwordHash = await authService.hashPassword(newPassword);
+    await prisma.user.update({ where: { id: userId }, data: { passwordHash } });
+
+    return res
+      .status(200)
+      .json({ success: true, message: 'Password updated successfully' });
+  } catch (err) {
+    console.error('Change password error:', err);
+    res
+      .status(500)
+      .json({ success: false, error: 'Failed to change password' });
+  }
+};
+
+// ========== 🤖 Telegram Link ==========
+export const linkTelegram = async (req, res) => {
+  try {
+    const { telegramCode, telegramId } = req.body;
+    if (!telegramCode || !telegramId)
+      return res.status(400).json({
+        success: false,
+        error: 'telegramCode and telegramId required',
+      });
+
+    const result = await telegramService.linkTelegramAccount(
+      telegramCode,
+      telegramId
+    );
+    return res.status(200).json({
+      success: true,
+      message: 'Telegram successfully linked',
+      data: result,
+    });
+  } catch (err) {
+    console.error('Telegram link error:', err);
+    res.status(400).json({ success: false, error: err.message });
+  }
+};
+
+// ========== 🔌 Telegram Unlink ==========
+export const unlinkTelegram = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    await telegramService.unlinkTelegramAccount(userId);
+    return res
+      .status(200)
+      .json({ success: true, message: 'Telegram successfully unlinked' });
+  } catch (err) {
+    console.error('Telegram unlink error:', err);
+    res
+      .status(500)
+      .json({ success: false, error: 'Failed to unlink Telegram' });
   }
 };

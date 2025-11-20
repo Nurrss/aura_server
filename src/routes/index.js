@@ -1,3 +1,4 @@
+// index.js routes
 import express from 'express';
 import authRoutes from './auth.routes.js';
 import tasksRoutes from './tasks.routes.js';

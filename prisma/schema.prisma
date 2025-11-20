@@ -81,7 +81,7 @@ model Task {
 
   // Relations
   focusSessions FocusSession[]
-  user          User          @relation(fields: [userId], references: [id])
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // ---------- 💪 5. Привычки ----------
@@ -97,7 +97,7 @@ model Habit {
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 
-  user            User         @relation(fields: [userId], references: [id])
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // ---------- ⏱️ 6. Фокус-сессии ----------
@@ -110,8 +110,8 @@ model FocusSession {
   completed Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  task      Task?    @relation(fields: [taskId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
+  task      Task?    @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // ---------- 📅 7. Дневные отчёты ----------
@@ -143,8 +143,8 @@ model Transaction {
   note        String?
   date        DateTime    @default(now())
   createdAt   DateTime    @default(now())
-  user        User        @relation(fields: [userId], references: [id])
-  category    Category?   @relation(fields: [categoryId], references: [id])
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 }
 
 // ---------- 🏷️ 9. Категории ----------
@@ -156,7 +156,7 @@ model Category {
   userId       Int
   createdAt    DateTime       @default(now())
 
-  user         User           @relation(fields: [userId], references: [id])
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
 
   @@index([userId, type])
