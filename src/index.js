@@ -4,6 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -34,6 +35,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cookieParser());
 
 // HTTP request logging
 app.use(morgan('combined', { stream: logger.stream }));

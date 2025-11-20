@@ -5,10 +5,9 @@ import crypto from 'crypto';
 import validator from 'validator';
 import dns from 'dns/promises';
 import { sendVerificationEmail } from '../services/email.service.js';
-import jwt from 'jsonwebtoken';
-import { ENV } from '../config/env.js';
 import * as telegramService from '../services/telegram.service.js';
 import { sendResetPasswordEmail } from '../utils/email.js';
+import { setAuthCookies, clearAuthCookies } from '../utils/cookies.js';
 
 /**
  * Register: create user + return tokens
@@ -125,7 +124,7 @@ export const verifyEmail = async (req, res) => {
 };
 
 /**
- * Login: return tokens
+ * Login: return tokens and set cookies
  */
 export const login = async (req, res) => {
   try {
@@ -137,7 +136,17 @@ export const login = async (req, res) => {
         .json({ success: false, error: 'Email and password required' });
 
     const data = await authService.loginUser(email, password);
-    return res.status(200).json({ success: true, data });
+
+    // Set HttpOnly cookies
+    setAuthCookies(res, data.accessToken, data.refreshToken);
+
+    // Return user info without tokens (tokens are in cookies)
+    return res.status(200).json({
+      success: true,
+      data: {
+        user: data.user,
+      },
+    });
   } catch (error) {
     console.error('Login error:', error);
     return res.status(401).json({ success: false, error: error.message });
@@ -145,38 +154,61 @@ export const login = async (req, res) => {
 };
 
 /**
- * Refresh tokens
+ * Refresh tokens - reads from cookie, sets new cookies
  */
 export const refresh = async (req, res) => {
   try {
-    const { refreshToken } = req.body;
+    // Try to get refresh token from cookie first, fallback to body
+    const refreshToken =
+      req.cookies['aura-refresh-token'] || req.body.refreshToken;
+
+    if (!refreshToken) {
+      return res
+        .status(401)
+        .json({ success: false, error: 'No refresh token provided' });
+    }
+
     const tokens = await authService.refreshTokens(refreshToken);
-    return res.status(200).json({ success: true, data: tokens });
+
+    // Set new HttpOnly cookies
+    setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
+
+    return res.status(200).json({ success: true, data: { refreshed: true } });
   } catch (error) {
     console.error('Refresh error:', error);
+    // Clear cookies on refresh failure
+    clearAuthCookies(res);
     return res.status(401).json({ success: false, error: error.message });
   }
 };
 
 /**
- * Logout
+ * Logout - clears cookies and invalidates refresh token
  */
 export const logout = async (req, res) => {
   try {
-    const header = req.headers.authorization;
-    if (!header)
-      return res
-        .status(401)
-        .json({ success: false, error: 'No token provided' });
+    // Get user ID from authenticated request (set by middleware)
+    const userId = req.user?.id;
 
-    const token = header.split(' ')[1];
-    const decoded = jwt.verify(token, ENV.JWT_ACCESS_SECRET);
+    if (userId) {
+      // Invalidate refresh token in database
+      await authService.logoutUser(userId);
+    }
 
-    const data = await authService.logoutUser(decoded.id);
-    return res.status(200).json({ success: true, data });
+    // Clear HttpOnly cookies
+    clearAuthCookies(res);
+
+    return res
+      .status(200)
+      .json({ success: true, data: { message: 'Logged out successfully' } });
   } catch (error) {
     console.error('Logout error:', error);
-    return res.status(400).json({ success: false, error: error.message });
+    // Even if there's an error, clear the cookies
+    clearAuthCookies(res);
+    return res.status(200).json({
+      success: true,
+      data: { message: 'Logged out successfully' },
+    });
   }
 };
 
