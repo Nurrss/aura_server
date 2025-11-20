@@ -1,12 +1,22 @@
 // task.controller.js
 import { ok, fail } from '../utils/response.js';
 import * as taskService from '../services/task.service.js';
+import { parsePaginationParams, buildPaginatedResponse } from '../utils/pagination.js';
 
 export const getTasks = async (req, res) => {
   try {
     const { from, to } = req.query;
-    const tasks = await taskService.getTasksForUser(req.user.id, from, to);
-    return ok(res, tasks);
+    const { page, limit, skip, take } = parsePaginationParams(req.query);
+
+    const { tasks, total } = await taskService.getTasksForUser(
+      req.user.id,
+      from,
+      to,
+      { skip, take }
+    );
+
+    const response = buildPaginatedResponse(tasks, total, page, limit);
+    return ok(res, response);
   } catch (err) {
     return fail(res, err.message || 'Failed to get tasks', 500);
   }

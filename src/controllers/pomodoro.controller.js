@@ -1,6 +1,7 @@
 //pomodoro.controller.js
 import { ok, fail } from '../utils/response.js';
 import * as pomodoroService from '../services/pomodoro.service.js';
+import { parsePaginationParams, buildPaginatedResponse } from '../utils/pagination.js';
 
 export const start = async (req, res) => {
   try {
@@ -34,8 +35,22 @@ export const finish = async (req, res) => {
 export const stats = async (req, res) => {
   try {
     const { from, to } = req.query;
-    const data = await pomodoroService.getStats(req.user.id, from, to);
-    return ok(res, data);
+    const { page, limit, skip, take } = parsePaginationParams(req.query);
+
+    const data = await pomodoroService.getStats(req.user.id, from, to, {
+      skip,
+      take,
+    });
+
+    const { totalMinutes, sessionsCount, sessions, total } = data;
+
+    const response = {
+      totalMinutes,
+      sessionsCount,
+      ...buildPaginatedResponse(sessions, total, page, limit),
+    };
+
+    return ok(res, response);
   } catch (err) {
     return fail(res, err.message || 'Stats failed', 400);
   }

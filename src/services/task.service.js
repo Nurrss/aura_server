@@ -2,7 +2,7 @@
 import { prisma } from '../config/prismaClient.js';
 import dayjs from 'dayjs';
 
-export const getTasksForUser = async (userId, from, to) => {
+export const getTasksForUser = async (userId, from, to, paginationParams) => {
   const where = { userId };
   if (from || to) {
     where.AND = [];
@@ -21,7 +21,20 @@ export const getTasksForUser = async (userId, from, to) => {
         ],
       });
   }
-  return prisma.task.findMany({ where, orderBy: { startTime: 'asc' } });
+
+  const { skip, take } = paginationParams || {};
+
+  const [tasks, total] = await Promise.all([
+    prisma.task.findMany({
+      where,
+      orderBy: { startTime: 'asc' },
+      skip,
+      take,
+    }),
+    prisma.task.count({ where }),
+  ]);
+
+  return { tasks, total };
 };
 
 export const createTask = async (userId, data) => {

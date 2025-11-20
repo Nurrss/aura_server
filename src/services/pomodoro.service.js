@@ -29,14 +29,37 @@ export const finishSession = async (userId, sessionId, duration, completed) => {
   return updated;
 };
 
-export const getStats = async (userId, from, to) => {
+export const getStats = async (userId, from, to, paginationParams) => {
   const where = { userId };
   if (from || to) where.createdAt = {};
   if (from) where.createdAt.gte = new Date(from);
   if (to) where.createdAt.lte = new Date(to);
-  const sessions = await prisma.focusSession.findMany({ where });
-  const total = sessions.reduce((sum, s) => sum + (s.duration || 0), 0);
-  return { totalMinutes: total, sessionsCount: sessions.length, sessions };
+
+  const { skip, take } = paginationParams || {};
+
+  const [sessions, totalSessions, allSessions] = await Promise.all([
+    prisma.focusSession.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take,
+    }),
+    prisma.focusSession.count({ where }),
+    // Get all sessions for calculating total minutes (not paginated)
+    prisma.focusSession.findMany({
+      where,
+      select: { duration: true },
+    }),
+  ]);
+
+  const totalMinutes = allSessions.reduce((sum, s) => sum + (s.duration || 0), 0);
+
+  return {
+    totalMinutes,
+    sessionsCount: totalSessions,
+    sessions,
+    total: totalSessions,
+  };
 };
 
 export const deleteSession = async (userId, sessionId) => {

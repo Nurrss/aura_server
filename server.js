@@ -1,6 +1,7 @@
 // server.js root
 import app from './src/index.js';
 import { startDailyJob } from './src/jobs/dailyReport.js';
+import logger from './src/config/logger.js';
 
 import nodemailer from 'nodemailer';
 import { ENV } from './src/config/env.js';
@@ -14,13 +15,30 @@ const testTransporter = nodemailer.createTransport({
 
 testTransporter
   .verify()
-  .then(() => console.log('✅ SMTP connection works!'))
-  .catch((err) => console.error('❌ SMTP connection failed:', err.message));
+  .then(() => logger.info('SMTP connection verified successfully'))
+  .catch((err) => logger.error('SMTP connection failed', { error: err.message }));
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+const server = app.listen(PORT, () => {
+  logger.info(`Server started on http://localhost:${PORT}`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    logger.info('HTTP server closed');
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  logger.info('SIGINT signal received: closing HTTP server');
+  server.close(() => {
+    logger.info('HTTP server closed');
+    process.exit(0);
+  });
 });
 
 startDailyJob();

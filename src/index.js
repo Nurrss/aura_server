@@ -3,11 +3,13 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import morgan from 'morgan';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 import { ENV } from './config/env.js';
+import logger from './config/logger.js';
 import authRoutes from './routes/auth.routes.js';
 import taskRoutes from './routes/tasks.routes.js';
 import habitRoutes from './routes/habits.routes.js';
@@ -32,6 +34,9 @@ app.use(
 );
 
 app.use(express.json());
+
+// HTTP request logging
+app.use(morgan('combined', { stream: logger.stream }));
 
 // Rate limiting for auth endpoints
 const authLimiter = rateLimit({

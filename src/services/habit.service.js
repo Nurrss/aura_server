@@ -2,8 +2,22 @@
 import { prisma } from '../config/prismaClient.js';
 import dayjs from 'dayjs';
 
-export const getHabits = async (userId) =>
-  prisma.habit.findMany({ where: { userId } });
+export const getHabits = async (userId, paginationParams) => {
+  const where = { userId };
+  const { skip, take } = paginationParams || {};
+
+  const [habits, total] = await Promise.all([
+    prisma.habit.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take,
+    }),
+    prisma.habit.count({ where }),
+  ]);
+
+  return { habits, total };
+};
 
 export const createHabit = async (userId, data) =>
   prisma.habit.create({ data: { userId, ...data } });

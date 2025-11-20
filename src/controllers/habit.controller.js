@@ -1,11 +1,19 @@
 //habit.controller.js
 import { ok, fail } from '../utils/response.js';
 import * as habitService from '../services/habit.service.js';
+import { parsePaginationParams, buildPaginatedResponse } from '../utils/pagination.js';
 
 export const getHabits = async (req, res) => {
   try {
-    const list = await habitService.getHabits(req.user.id);
-    return ok(res, list);
+    const { page, limit, skip, take } = parsePaginationParams(req.query);
+
+    const { habits, total } = await habitService.getHabits(req.user.id, {
+      skip,
+      take,
+    });
+
+    const response = buildPaginatedResponse(habits, total, page, limit);
+    return ok(res, response);
   } catch (err) {
     return fail(res, err.message || 'Failed', 500);
   }
