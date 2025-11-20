@@ -18,21 +18,26 @@ export const updateHabit = async (userId, habitId, data) => {
  * Simple toggle:
  * - if lastCompleted is yesterday -> streak++
  * - else -> streak = 1
- * For this MVP we store lastCompleted date into `reminderTime` field as hack (better to add lastCompleted column later)
  */
 export const toggleHabit = async (userId, habitId) => {
   const h = await prisma.habit.findUnique({ where: { id: habitId } });
   if (!h || h.userId !== userId) throw new Error('Habit not found');
-  const today = dayjs().format('YYYY-MM-DD');
-  const last = h.reminderTime || null; // reusing reminderTime as lastCompleted (quick)
+  const today = dayjs().startOf('day');
+  const yesterday = dayjs().subtract(1, 'day').startOf('day');
+  const lastCompleted = h.lastCompletedAt ? dayjs(h.lastCompletedAt).startOf('day') : null;
+
   let streak = h.streak || 0;
-  if (last === dayjs().subtract(1, 'day').format('YYYY-MM-DD')) {
+  if (lastCompleted && lastCompleted.isSame(yesterday, 'day')) {
     streak += 1;
+  } else if (lastCompleted && lastCompleted.isSame(today, 'day')) {
+    // Already completed today, don't update
+    return h;
   } else {
     streak = 1;
   }
+
   return prisma.habit.update({
     where: { id: habitId },
-    data: { streak, reminderTime: today },
+    data: { streak, lastCompletedAt: today.toDate() },
   });
 };

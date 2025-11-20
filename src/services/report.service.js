@@ -1,3 +1,4 @@
+// report.service.js
 import { prisma } from '../config/prismaClient.js';
 import dayjs from 'dayjs';
 
@@ -7,7 +8,7 @@ export const getTodayReport = async (userId) => {
   const tasksCompleted = await prisma.task.count({
     where: {
       userId,
-      status: 'done',
+      status: 'completed',
       updatedAt: { gte: todayStart, lte: todayEnd },
     },
   });
@@ -19,8 +20,11 @@ export const getTodayReport = async (userId) => {
   });
   const focusMinutes = focusSessions.reduce((s, x) => s + (x.duration || 0), 0);
   const habitsDone = await prisma.habit.count({
-    where: { userId, reminderTime: dayjs().format('YYYY-MM-DD') },
-  }); // using reminderTime as lastCompleted hack
+    where: {
+      userId,
+      lastCompletedAt: { gte: todayStart, lte: todayEnd },
+    },
+  });
   return {
     date: new Date(),
     tasksCompleted,
