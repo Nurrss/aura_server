@@ -9,6 +9,7 @@ import {
   refreshSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  changePasswordSchema,
 } from '../validators/auth.validator.js';
 
 const router = express.Router();
@@ -20,7 +21,7 @@ router.post('/refresh', authController.refresh);
 router.post('/logout', authenticate, authController.logout);
 router.post('/forgot-password', validate(forgotPasswordSchema), authController.forgotPassword);
 router.post('/reset-password', validate(resetPasswordSchema), authController.resetPassword);
-router.patch('/change-password', authenticate, authController.changePassword);
+router.patch('/change-password', authenticate, validate(changePasswordSchema), authController.changePassword);
 
 // Telegram linking
 router.post('/telegram/link', authController.linkTelegram);
