@@ -6,6 +6,8 @@ import * as controller from '../controllers/report.controller.js';
 const router = express.Router();
 router.use(authenticate);
 
+// Get reports for date range
+router.get('/', controller.getReports);
 router.get('/today', controller.getToday);
 router.post('/daily', controller.saveDaily);
 

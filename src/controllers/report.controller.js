@@ -4,6 +4,30 @@ import { getTodayReport, saveDailyReport } from '../services/report.service.js';
 import { sendMessageToUser } from '../services/telegram.service.js';
 import { ok, fail } from '../utils/response.js';
 
+// Get reports for a date range
+export const getReports = async (req, res) => {
+  try {
+    const { from, to } = req.query;
+
+    const where = { userId: req.user.id };
+
+    if (from || to) {
+      where.date = {};
+      if (from) where.date.gte = new Date(from);
+      if (to) where.date.lte = new Date(to);
+    }
+
+    const reports = await prisma.dailyReport.findMany({
+      where,
+      orderBy: { date: 'desc' },
+    });
+
+    return ok(res, reports);
+  } catch (err) {
+    return fail(res, err.message || 'Failed to fetch reports', 500);
+  }
+};
+
 export const getToday = async (req, res) => {
   try {
     const r = await getTodayReport(req.user.id);

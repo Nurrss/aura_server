@@ -1,6 +1,9 @@
 // server.js root
 import app from './src/index.js';
 import { startDailyJob } from './src/jobs/dailyReport.js';
+import { startDailyTaskGenerationJob } from './src/jobs/dailyTaskGeneration.js';
+import { startRoadmapNotificationJobs } from './src/jobs/roadmapNotifications.js';
+import { startAICoachingJobs } from './src/jobs/aiCoaching.js';
 import logger from './src/config/logger.js';
 
 import nodemailer from 'nodemailer';
@@ -16,7 +19,9 @@ const testTransporter = nodemailer.createTransport({
 testTransporter
   .verify()
   .then(() => logger.info('SMTP connection verified successfully'))
-  .catch((err) => logger.error('SMTP connection failed', { error: err.message }));
+  .catch((err) =>
+    logger.error('SMTP connection failed', { error: err.message })
+  );
 
 const PORT = process.env.PORT || 3000;
 
@@ -42,3 +47,6 @@ process.on('SIGINT', () => {
 });
 
 startDailyJob();
+startDailyTaskGenerationJob();
+startRoadmapNotificationJobs();
+startAICoachingJobs();

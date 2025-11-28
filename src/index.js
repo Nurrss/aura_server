@@ -11,7 +11,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { ENV } from './config/env.js';
-import logger from './config/logger.js';
 import authRoutes from './routes/auth.routes.js';
 import taskRoutes from './routes/tasks.routes.js';
 import habitRoutes from './routes/habits.routes.js';
@@ -19,6 +18,9 @@ import pomodoroRoutes from './routes/pomodoro.routes.js';
 import reportRoutes from './routes/reports.routes.js';
 import telegramRoutes from './routes/telegram.routes.js';
 import userRoutes from './routes/user.routes.js';
+import financeRoutes from './routes/finance.routes.js';
+import roadmapRoutes from './routes/roadmap.routes.js';
+import analyticsRoutes from './routes/analytics.routes.js';
 import './bot/telegramBot.js';
 
 const app = express();
@@ -40,7 +42,7 @@ app.use(cookieParser());
 
 // CSRF Protection
 const {
-  generateToken, // generates a CSRF token
+  generateCsrfToken, // generates a CSRF token
   doubleCsrfProtection, // middleware to validate CSRF
 } = doubleCsrf({
   getSecret: () => ENV.JWT_ACCESS_SECRET, // Use existing secret
@@ -53,40 +55,29 @@ const {
   },
   size: 64,
   ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
+  getSessionIdentifier: (req) => req.sessionID || req.ip || '', // Use session ID or IP
 });
 
 // Endpoint to get CSRF token
 app.get('/api/csrf-token', (req, res) => {
-  const csrfToken = generateToken(req, res);
+  const csrfToken = generateCsrfToken(req, res);
   res.json({ csrfToken });
 });
 
-// HTTP request logging
-app.use(morgan('combined', { stream: logger.stream }));
-
-// Rate limiting for auth endpoints
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Max 5 requests per window
-  message: 'Too many authentication attempts, please try again later',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+// HTTP request logging (dev format for better readability in console)
+app.use(morgan('dev'));
 
 // Rate limiting for email endpoints
 const emailLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 3, // Max 3 emails per hour
+  max: 999, // Max 3 emails per hour
   message: 'Too many email requests, please try again later',
   standardHeaders: true,
   legacyHeaders: false,
 });
 
-// Apply rate limiting to auth routes
-app.use('/api/auth/login', authLimiter);
-app.use('/api/auth/register', authLimiter);
+// Apply rate limiting to email routes
 app.use('/api/auth/forgot-password', emailLimiter);
-app.use('/api/auth/reset-password', authLimiter);
 
 // Apply CSRF protection to all API routes (ignores GET/HEAD/OPTIONS)
 app.use('/api', doubleCsrfProtection);
@@ -98,8 +89,11 @@ app.use('/api/pomodoro', pomodoroRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/telegram', telegramRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/finance', financeRoutes);
+app.use('/api/roadmap', roadmapRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.json({ success: true, message: 'Aura API is running' });
 });
 

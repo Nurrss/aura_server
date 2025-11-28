@@ -35,55 +35,194 @@ enum Frequency {
   monthly
 }
 
+enum RoadmapStatus {
+  draft
+  active
+  paused
+  completed
+  archived
+}
+
+enum GenerationMethod {
+  llm_assisted
+  manual
+  hybrid
+}
+
+enum GoalCategory {
+  career
+  health
+  finance
+  relationships
+  learning
+  personal
+  other
+}
+
+enum Timeframe {
+  year_1
+  year_2
+  year_3
+  year_4
+  year_5
+  ongoing
+}
+
+enum GoalStatus {
+  not_started
+  in_progress
+  completed
+  blocked
+  abandoned
+}
+
+enum MilestoneStatus {
+  not_started
+  in_progress
+  completed
+  overdue
+  skipped
+}
+
+enum Period {
+  Q1
+  Q2
+  Q3
+  Q4
+  monthly
+}
+
+enum RoadmapTaskPriority {
+  low
+  normal
+  high
+  critical
+}
+
+enum RoadmapTaskStatus {
+  pending
+  in_progress
+  completed
+  cancelled
+  rescheduled
+}
+
+enum TaskSource {
+  ai_generated
+  user_created
+  system_suggested
+}
+
+enum SnapshotType {
+  daily
+  weekly
+  monthly
+  quarterly
+}
+
+enum TrendDirection {
+  improving
+  stable
+  declining
+}
+
+enum AdjustmentTrigger {
+  user_requested
+  system_detected
+  scheduled_review
+}
+
+enum ReminderType {
+  daily_tasks
+  milestone_due
+  weekly_review
+  monthly_review
+}
+
+enum ReminderFrequency {
+  daily
+  weekly
+  monthly
+  once
+}
+
+enum ReminderChannel {
+  telegram
+  email
+  both
+}
+
+enum MotivationStyle {
+  intrinsic
+  extrinsic
+  mixed
+}
+
+enum RiskTolerance {
+  low
+  medium
+  high
+}
+
+enum WorkStyle {
+  structured
+  flexible
+  adaptive
+}
+
 // ---------- 👤 3. Модель пользователя ----------
 
 model User {
-  id            Int             @id @default(autoincrement())
-  email         String          @unique
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
   name          String?
   passwordHash  String
-  telegramId    String?         @unique
-  telegramCode  String?         @unique
-  role          UserRole        @default(user)
-  isVerified    Boolean         @default(false)
+  telegramId    String?   @unique
+  telegramCode  String?   @unique
+  role          UserRole  @default(user)
+  isVerified    Boolean   @default(false)
   verifyToken   String?
   verifyExpires DateTime?
   preferences   Json?
 
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  refreshToken  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  refreshToken String?
 
-  reports       DailyReport[]
-  focusSessions FocusSession[]
-  habits        Habit[]
-  tasks         Task[]
-  transactions  Transaction[]
-  categories    Category[]
+  reports            DailyReport[]
+  focusSessions      FocusSession[]
+  habits             Habit[]
+  tasks              Task[]
+  transactions       Transaction[]
+  categories         Category[]
+  budgets            Budget[]
+  personalityProfile PersonalityProfile?
+  roadmaps           Roadmap[]
+  roadmapReminders   RoadmapReminder[]
 
   @@index([verifyToken])
 }
 
-
 // ---------- ✅ 4. Задачи ----------
 
 model Task {
-  id            Int           @id @default(autoincrement())
-  userId        Int
-  title         String
-  description   String?
-  startTime     DateTime?
-  endTime       DateTime?
-  isAllDay      Boolean       @default(false)
-  category      String?
-  priority      TaskPriority  @default(normal)
-  status        TaskStatus    @default(pending)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id          Int          @id @default(autoincrement())
+  userId      Int
+  title       String
+  description String?
+  startTime   DateTime?
+  endTime     DateTime?
+  isAllDay    Boolean      @default(false)
+  category    String?
+  priority    TaskPriority @default(normal)
+  status      TaskStatus   @default(pending)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   // Relations
   focusSessions FocusSession[]
-  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roadmapTasks  RoadmapTask[]
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([userId, status])
@@ -94,17 +233,17 @@ model Task {
 // ---------- 💪 5. Привычки ----------
 
 model Habit {
-  id              Int         @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   userId          Int
   title           String
-  frequency       Frequency    @default(daily)
+  frequency       Frequency @default(daily)
   reminderTime    String?
   lastCompletedAt DateTime?
-  streak          Int          @default(0)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  streak          Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([userId, createdAt])
@@ -120,8 +259,8 @@ model FocusSession {
   completed Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  task      Task?    @relation(fields: [taskId], references: [id], onDelete: SetNull)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task Task? @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([taskId])
@@ -141,7 +280,7 @@ model DailyReport {
   habitsDone     Int
   createdAt      DateTime @default(now())
 
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Один отчёт в день на пользователя
   @@unique([userId, date])
@@ -151,16 +290,16 @@ model DailyReport {
 // ---------- 💰 8. Финансы ----------
 
 model Transaction {
-  id          Int        @id @default(autoincrement())
-  userId      Int
-  type        String      // 'income' | 'expense'
-  amount      Decimal      @db.Decimal
-  categoryId  Int?
-  note        String?
-  date        DateTime    @default(now())
-  createdAt   DateTime    @default(now())
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  category    Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  type       String // 'income' | 'expense'
+  amount     Decimal   @db.Decimal
+  categoryId Int?
+  note       String?
+  date       DateTime  @default(now())
+  createdAt  DateTime  @default(now())
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   @@index([userId])
   @@index([categoryId])
@@ -171,14 +310,231 @@ model Transaction {
 // ---------- 🏷️ 9. Категории ----------
 
 model Category {
-  id           Int            @id @default(autoincrement())
-  name         String
-  type         String         // 'income' | 'expense'
-  userId       Int
-  createdAt    DateTime       @default(now())
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      String // 'income' | 'expense'
+  userId    Int
+  createdAt DateTime @default(now())
 
-  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
+  budget       Budget?
 
   @@index([userId, type])
+}
+
+// ---------- 💵 10. Бюджеты ----------
+
+model Budget {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  categoryId     Int      @unique // one budget per category
+  monthlyLimit   Decimal  @db.Decimal
+  alertThreshold Int      @default(80) // percentage (0-100)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ---------- 🎯 11. Roadmap System ----------
+
+model PersonalityProfile {
+  id              Int             @id @default(autoincrement())
+  userId          Int             @unique
+  mbtiType        String?
+  strengths       Json? // Array of strengths
+  weaknesses      Json? // Array of weaknesses
+  values          Json? // Core values array
+  motivationStyle MotivationStyle @default(intrinsic)
+  riskTolerance   RiskTolerance   @default(medium)
+  workStyle       WorkStyle       @default(flexible)
+  assessmentDate  DateTime        @default(now())
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Roadmap {
+  id                 Int              @id @default(autoincrement())
+  userId             Int
+  title              String
+  visionStatement    String?          @db.Text
+  startDate          DateTime
+  endDate            DateTime
+  status             RoadmapStatus    @default(draft)
+  generationMethod   GenerationMethod @default(manual)
+  llmModel           String?
+  generationPrompt   String?          @db.Text
+  lastReviewDate     DateTime?
+  progressPercentage Decimal          @default(0) @db.Decimal(5, 2)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goals             Goal[]
+  roadmapTasks      RoadmapTask[]
+  progressSnapshots ProgressSnapshot[]
+  adjustments       RoadmapAdjustment[]
+  reminders         RoadmapReminder[]
+
+  @@index([userId])
+  @@index([userId, status])
+  @@index([userId, createdAt])
+}
+
+model Goal {
+  id                   Int          @id @default(autoincrement())
+  roadmapId            Int
+  category             GoalCategory
+  title                String
+  description          String?      @db.Text
+  priority             Int          @default(3) // 1-5
+  timeframe            Timeframe    @default(year_1)
+  targetYear           Int
+  successCriteria      String?      @db.Text
+  dependencies         Json? // Array of goal IDs
+  status               GoalStatus   @default(not_started)
+  completionPercentage Decimal      @default(0) @db.Decimal(5, 2)
+  order                Int          @default(0)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  roadmap    Roadmap     @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+  milestones Milestone[]
+
+  @@index([roadmapId])
+  @@index([roadmapId, status])
+  @@index([roadmapId, category])
+}
+
+model Milestone {
+  id                   Int             @id @default(autoincrement())
+  goalId               Int
+  title                String
+  description          String?         @db.Text
+  dueDate              DateTime
+  period               Period?
+  year                 Int
+  quarter              Int?
+  month                Int?
+  status               MilestoneStatus @default(not_started)
+  completionDate       DateTime?
+  estimatedEffortHours Int?
+  actualEffortHours    Int?
+  order                Int             @default(0)
+  isAutoGenerated      Boolean         @default(false)
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  goal         Goal          @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  roadmapTasks RoadmapTask[]
+
+  @@index([goalId])
+  @@index([goalId, status])
+  @@index([dueDate])
+  @@index([status, dueDate])
+}
+
+model RoadmapTask {
+  id                  Int                 @id @default(autoincrement())
+  milestoneId         Int?
+  roadmapId           Int
+  taskId              Int? // Link to existing Task if integrated
+  title               String
+  description         String?             @db.Text
+  scheduledDate       DateTime
+  estimatedDuration   Int? // minutes
+  priority            RoadmapTaskPriority @default(normal)
+  status              RoadmapTaskStatus   @default(pending)
+  completionDate      DateTime?
+  isRecurring         Boolean             @default(false)
+  recurrenceRule      String?
+  source              TaskSource          @default(user_created)
+  aiGenerationContext Json?
+  rescheduleCount     Int                 @default(0)
+  skipReason          String?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  milestone Milestone? @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+  roadmap   Roadmap    @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+  task      Task?      @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  @@index([roadmapId])
+  @@index([milestoneId])
+  @@index([roadmapId, status])
+  @@index([roadmapId, scheduledDate])
+  @@index([status, scheduledDate])
+}
+
+model ProgressSnapshot {
+  id                  Int            @id @default(autoincrement())
+  roadmapId           Int
+  snapshotDate        DateTime
+  snapshotType        SnapshotType
+  overallProgress     Decimal        @db.Decimal(5, 2)
+  goalsStarted        Int            @default(0)
+  goalsCompleted      Int            @default(0)
+  milestonesCompleted Int            @default(0)
+  tasksCompleted      Int            @default(0)
+  tasksSkipped        Int            @default(0)
+  totalFocusMinutes   Int            @default(0)
+  velocityScore       Decimal?       @db.Decimal(5, 2)
+  trendDirection      TrendDirection @default(stable)
+  notes               String?        @db.Text
+  createdAt           DateTime       @default(now())
+
+  roadmap Roadmap @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+
+  @@index([roadmapId])
+  @@index([roadmapId, snapshotDate])
+  @@index([snapshotType, snapshotDate])
+}
+
+model RoadmapAdjustment {
+  id                 Int               @id @default(autoincrement())
+  roadmapId          Int
+  adjustmentDate     DateTime          @default(now())
+  trigger            AdjustmentTrigger
+  reason             String?           @db.Text
+  affectedGoals      Json? // Array of goal IDs
+  affectedMilestones Json? // Array of milestone IDs
+  changesSummary     String?           @db.Text
+  llmInvolved        Boolean           @default(false)
+  approvedBy         Int?
+  createdAt          DateTime          @default(now())
+
+  roadmap Roadmap @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+
+  @@index([roadmapId])
+  @@index([roadmapId, adjustmentDate])
+}
+
+model RoadmapReminder {
+  id            Int               @id @default(autoincrement())
+  userId        Int
+  roadmapId     Int
+  milestoneId   Int?
+  reminderType  ReminderType
+  scheduledTime String // HH:MM format
+  frequency     ReminderFrequency @default(daily)
+  nextTrigger   DateTime?
+  channel       ReminderChannel   @default(telegram)
+  isActive      Boolean           @default(true)
+  lastSent      DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roadmap Roadmap @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([roadmapId])
+  @@index([userId, isActive])
+  @@index([nextTrigger, isActive])
 }

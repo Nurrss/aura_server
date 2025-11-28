@@ -127,15 +127,19 @@ export const verifyEmail = async (req, res) => {
  * Login: return tokens and set cookies
  */
 export const login = async (req, res) => {
+  console.log('📩 Login request received:', { email: req.body?.email });
   try {
     const { email, password } = req.body;
 
-    if (!email || !password)
+    if (!email || !password) {
+      console.log('❌ Login failed: missing credentials');
       return res
         .status(400)
         .json({ success: false, error: 'Email and password required' });
+    }
 
     const data = await authService.loginUser(email, password);
+    console.log('✅ Login successful for:', email);
 
     // Set HttpOnly cookies
     setAuthCookies(res, data.accessToken, data.refreshToken);
@@ -148,7 +152,7 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('❌ Login error:', error.message);
     return res.status(401).json({ success: false, error: error.message });
   }
 };

@@ -16,7 +16,9 @@ for (const key of required) {
 const recommended = ['SMTP_HOST', 'SMTP_USER', 'SMTP_PASS', 'APP_URL'];
 for (const key of recommended) {
   if (!process.env[key]) {
-    console.warn(`⚠️  Warning: Missing recommended environment variable: ${key}`);
+    console.warn(
+      `⚠️  Warning: Missing recommended environment variable: ${key}`
+    );
   }
 }
 
@@ -37,5 +39,13 @@ export const ENV = {
   SMTP_PASS: process.env.SMTP_PASS,
 
   APP_URL: process.env.APP_URL,
-  CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:5173',
+  CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:5174',
+
+  // LLM Configuration
+  LLM_PROVIDER: process.env.LLM_PROVIDER || 'groq', // 'openai' or 'groq'
+  OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+  GROQ_API_KEY: process.env.GROQ_API_KEY,
+  LLM_MODEL: process.env.LLM_MODEL || 'llama-3.3-70b-versatile',
+  LLM_TEMPERATURE: Number(process.env.LLM_TEMPERATURE) || 0.7,
+  LLM_MAX_TOKENS: Number(process.env.LLM_MAX_TOKENS) || 4000,
 };

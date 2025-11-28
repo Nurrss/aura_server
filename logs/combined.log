@@ -1,0 +1,120 @@
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-21 12:09:58:958"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-21 12:10:00:100"}
+{"level":"http","message":"::1 - - [21/Nov/2025:07:10:30 +0000] \"GET / HTTP/1.1\" 200 48 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 12:10:30:1030"}
+{"level":"http","message":"::1 - - [21/Nov/2025:07:10:31 +0000] \"GET /favicon.ico HTTP/1.1\" 404 150 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 12:10:31:1031"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-21 14:56:01:561"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-21 14:56:01:561"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-21 15:09:11:911"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-21 15:09:12:912"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-21 15:09:32:932"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-21 15:09:33:933"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-21 15:09:58:958"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-21 15:09:59:959"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:10:13 +0000] \"GET / HTTP/1.1\" 200 48 \"-\" \"curl/8.7.1\"","timestamp":"2025-11-21 15:10:13:1013"}
+{"level":"info","message":"SIGTERM signal received: closing HTTP server","timestamp":"2025-11-21 15:11:58:1158"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-21 15:12:07:127"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-21 15:12:07:127"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:12:43 +0000] \"POST /api/auth/login HTTP/1.1\" 200 113 \"http://localhost:5173/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 15:12:43:1243"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:12:46 +0000] \"POST /api/auth/login HTTP/1.1\" 200 113 \"http://localhost:5173/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 15:12:46:1246"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:12:47 +0000] \"POST /api/auth/login HTTP/1.1\" 200 113 \"http://localhost:5173/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 15:12:47:1247"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:12:54 +0000] \"POST /api/auth/login HTTP/1.1\" 200 113 \"http://localhost:5173/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 15:12:54:1254"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:12:55 +0000] \"POST /api/auth/login HTTP/1.1\" 200 113 \"http://localhost:5173/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 15:12:55:1255"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:12:55 +0000] \"POST /api/auth/login HTTP/1.1\" 429 56 \"http://localhost:5173/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 15:12:55:1255"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:12:57 +0000] \"POST /api/auth/login HTTP/1.1\" 429 56 \"http://localhost:5173/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 15:12:57:1257"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:13:24 +0000] \"POST /api/auth/register HTTP/1.1\" 429 56 \"http://localhost:5173/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 15:13:24:1324"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:14:37 +0000] \"POST /api/auth/register HTTP/1.1\" 429 56 \"http://localhost:5173/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 15:14:37:1437"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:19:09 +0000] \"POST /api/auth/register HTTP/1.1\" 429 56 \"-\" \"PostmanRuntime/7.49.1\"","timestamp":"2025-11-21 15:19:09:199"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-21 15:24:01:241"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-21 15:24:02:242"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:24:12 +0000] \"GET / HTTP/1.1\" 200 48 \"-\" \"PostmanRuntime/7.49.1\"","timestamp":"2025-11-21 15:24:12:2412"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:24:21 +0000] \"POST /api/auth/register HTTP/1.1\" 403 756 \"-\" \"PostmanRuntime/7.49.1\"","timestamp":"2025-11-21 15:24:21:2421"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:24:49 +0000] \"POST /api/auth/register HTTP/1.1\" 400 45 \"http://localhost:5173/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 15:24:49:2449"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:25:32 +0000] \"POST /api/auth/register HTTP/1.1\" 400 45 \"http://localhost:5173/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-21 15:25:32:2532"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-21 15:29:35:2935"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-21 15:29:36:2936"}
+{"level":"http","message":"::1 - - [21/Nov/2025:10:30:27 +0000] \"POST /api/auth/register HTTP/1.1\" 403 756 \"-\" \"curl/8.7.1\"","timestamp":"2025-11-21 15:30:27:3027"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:14:25:1425"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:14:26:1426"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:16:12:1612"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:16:13:1613"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:16:16:1616"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:16:17:1617"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:16:31:1631"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:16:32:1632"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:16:33:1633"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:16:34:1634"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:16:35:1635"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:19:12:1912"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:19:14:1914"}
+{"level":"info","message":"SIGINT signal received: closing HTTP server","timestamp":"2025-11-23 19:19:15:1915"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:19:25:1925"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:19:25:1925"}
+{"level":"http","message":"::1 - - [23/Nov/2025:14:20:03 +0000] \"POST /api/auth/register HTTP/1.1\" 201 130 \"http://localhost:5174/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-23 19:20:03:203"}
+{"level":"http","message":"::1 - - [23/Nov/2025:14:20:16 +0000] \"GET /api/auth/verify-email?token=38fe97eededc38841f0e6dee416ec5a46341cf29cbb781224c1aedd7cb39aed3 HTTP/1.1\" 200 57 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-23 19:20:16:2016"}
+{"level":"http","message":"::1 - - [23/Nov/2025:14:20:16 +0000] \"GET /favicon.ico HTTP/1.1\" 404 150 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-23 19:20:16:2016"}
+{"level":"http","message":"::1 - - [23/Nov/2025:14:20:33 +0000] \"POST /api/auth/login HTTP/1.1\" 200 114 \"http://localhost:5174/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-23 19:20:33:2033"}
+{"level":"http","message":"::1 - - [23/Nov/2025:14:20:36 +0000] \"POST /api/auth/login HTTP/1.1\" 200 114 \"http://localhost:5174/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-23 19:20:36:2036"}
+{"level":"http","message":"::1 - - [23/Nov/2025:14:20:42 +0000] \"POST /api/auth/login HTTP/1.1\" 200 114 \"http://localhost:5174/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-23 19:20:42:2042"}
+{"level":"http","message":"::1 - - [23/Nov/2025:14:20:43 +0000] \"POST /api/auth/login HTTP/1.1\" 200 114 \"http://localhost:5174/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-23 19:20:43:2043"}
+{"level":"http","message":"::1 - - [23/Nov/2025:14:20:43 +0000] \"POST /api/auth/login HTTP/1.1\" 429 56 \"http://localhost:5174/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-23 19:20:43:2043"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:21:33:2133"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:21:34:2134"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:21:46:2146"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:21:47:2147"}
+{"level":"http","message":"::1 - - [23/Nov/2025:14:22:06 +0000] \"POST /api/auth/login HTTP/1.1\" 200 114 \"http://localhost:5174/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-23 19:22:06:226"}
+{"level":"http","message":"::1 - - [23/Nov/2025:14:22:23 +0000] \"POST /api/auth/login HTTP/1.1\" 200 114 \"http://localhost:5174/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-23 19:22:23:2223"}
+{"level":"http","message":"::1 - - [23/Nov/2025:14:22:41 +0000] \"POST /api/auth/login HTTP/1.1\" 200 114 \"http://localhost:5174/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36\"","timestamp":"2025-11-23 19:22:41:2241"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:27:28:2728"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:27:29:2729"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:27:43:2743"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:27:44:2744"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:35:30:3530"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:35:31:3531"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 19:35:37:3537"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 19:35:38:3538"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 20:13:26:1326"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 20:13:27:1327"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-23 20:13:51:1351"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-23 20:13:52:1352"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-26 17:13:06:136"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-26 17:13:08:138"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-26 17:15:27:1527"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-26 17:15:28:1528"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:27:48:2748"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:27:49:2749"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:28:00:280"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:28:01:281"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:28:17:2817"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:28:18:2818"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:28:26:2826"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:28:27:2827"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:29:02:292"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:29:03:293"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:29:56:2956"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:29:57:2957"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:30:17:3017"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:30:18:3018"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:30:41:3041"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:30:42:3042"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:31:30:3130"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:31:31:3131"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:54:15:5415"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:54:16:5416"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:54:27:5427"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:54:28:5428"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:54:38:5438"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:54:39:5439"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:54:58:5458"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:54:59:5459"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:55:56:5556"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:55:57:5557"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:56:49:5649"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:56:49:5649"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:57:26:5726"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:57:27:5727"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 09:57:40:5740"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 09:57:41:5741"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 15:25:42:2542"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 15:25:45:2545"}
+{"level":"info","message":"Server started on http://localhost:3000","timestamp":"2025-11-27 15:26:12:2612"}
+{"level":"info","message":"SMTP connection verified successfully","timestamp":"2025-11-27 15:26:15:2615"}
