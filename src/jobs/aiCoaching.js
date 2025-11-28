@@ -1,7 +1,7 @@
 import cron from 'node-cron';
 import { prisma } from '../config/prismaClient.js';
 import { generateWeeklyCoaching } from '../services/aiCoaching.service.js';
-import { sendMessageToUser } from '../services/roadmapNotification.service.js';
+import { sendMessageToUser } from '../services/telegram.service.js';
 import logger from '../config/logger.js';
 
 /**
